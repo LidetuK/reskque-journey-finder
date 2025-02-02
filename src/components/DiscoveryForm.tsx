@@ -31,16 +31,48 @@ const DiscoveryForm = () => {
   const handleNext = () => {
     if (currentStep < TOTAL_STEPS) {
       setCurrentStep(prev => prev + 1);
-      toast({
-        title: "Progress saved!",
-        description: `Step ${currentStep} completed successfully.`,
-      });
+      if (currentStep > 1) {
+        toast({
+          title: "Progress saved!",
+          description: `Step ${currentStep} completed successfully.`,
+        });
+      }
     }
   };
 
   const handlePrevious = () => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
+    }
+  };
+
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <>
+            <h2 className="question-text">
+              What areas of your life do you want to focus on?
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {['Mindset', 'Wealth', 'Health', 'Relationships', 'Business', 'Leadership', 'Happiness'].map((area) => (
+                <button
+                  key={area}
+                  className={`option-button ${selectedAreas.includes(area) ? 'selected' : ''}`}
+                  onClick={() => handleAreaSelect(area)}
+                  type="button"
+                  aria-pressed={selectedAreas.includes(area)}
+                >
+                  {area}
+                </button>
+              ))}
+            </div>
+          </>
+        );
+      // Additional steps will be implemented here
+      default:
+        return <div>Step {currentStep} content coming soon...</div>;
     }
   };
 
@@ -65,23 +97,7 @@ const DiscoveryForm = () => {
         </div>
 
         <div className="mb-8">
-          <h2 className="question-text">
-            What areas of your life do you want to focus on?
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {['Mindset', 'Wealth', 'Health', 'Relationships', 'Business', 'Leadership', 'Happiness'].map((area) => (
-              <button
-                key={area}
-                className={`option-button ${selectedAreas.includes(area) ? 'selected' : ''}`}
-                onClick={() => handleAreaSelect(area)}
-                type="button"
-                aria-pressed={selectedAreas.includes(area)}
-              >
-                {area}
-              </button>
-            ))}
-          </div>
+          {renderStep()}
         </div>
 
         <div className="flex justify-between mt-12">
