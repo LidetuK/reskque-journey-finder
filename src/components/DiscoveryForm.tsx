@@ -7,6 +7,7 @@ const TOTAL_STEPS = 7;
 
 const DiscoveryForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     situation: '',
@@ -16,6 +17,16 @@ const DiscoveryForm = () => {
     reason: '',
   });
   const { toast } = useToast();
+
+  const handleAreaSelect = (area: string) => {
+    setSelectedAreas(prev => {
+      if (prev.includes(area)) {
+        return prev.filter(a => a !== area);
+      } else {
+        return [...prev, area];
+      }
+    });
+  };
 
   const handleNext = () => {
     if (currentStep < TOTAL_STEPS) {
@@ -62,10 +73,10 @@ const DiscoveryForm = () => {
             {['Mindset', 'Wealth', 'Health', 'Relationships', 'Business', 'Leadership', 'Happiness'].map((area) => (
               <button
                 key={area}
-                className="option-button"
-                onClick={() => {
-                  // Handle selection
-                }}
+                className={`option-button ${selectedAreas.includes(area) ? 'selected' : ''}`}
+                onClick={() => handleAreaSelect(area)}
+                type="button"
+                aria-pressed={selectedAreas.includes(area)}
               >
                 {area}
               </button>
@@ -85,6 +96,7 @@ const DiscoveryForm = () => {
           <button 
             onClick={handleNext}
             className="form-button ml-auto"
+            disabled={selectedAreas.length === 0}
           >
             Next step
           </button>
