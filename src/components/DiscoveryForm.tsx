@@ -7,10 +7,12 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from "@/hooks/use-toast";
 
 const TOTAL_STEPS = 7;
 
 const DiscoveryForm = () => {
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     // Step 1
@@ -82,6 +84,16 @@ const DiscoveryForm = () => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
     }
+  };
+
+  const handleSubmit = () => {
+    // Handle form submission logic here
+    toast({
+      title: "Thank you for your submission!",
+      description: "Thank you for sharing your thoughts and insights! We truly appreciate your honesty and openness. Based on your responses, we'll prepare personalized recommendations for your upcoming discovery call with Resk'Que. An AI assistant will contact you within the next few minutes to confirm your information and answer any immediate questions you might have. This will also help us prepare for your scheduled discovery call with Resk'Que. We look forward to connecting with you soon!",
+      duration: 10000, // Show for 10 seconds
+      className: "bg-green-50 border-green-200",
+    });
   };
 
   const renderStep = () => {
@@ -476,13 +488,23 @@ const DiscoveryForm = () => {
               Previous
             </button>
           )}
-          <button 
-            onClick={handleNext}
-            className="form-button ml-auto"
-            disabled={!isStepValid()}
-          >
-            {currentStep === TOTAL_STEPS ? 'Submit' : 'Next step'}
-          </button>
+          {currentStep === TOTAL_STEPS ? (
+            <button 
+              onClick={handleSubmit}
+              className="form-button ml-auto"
+              disabled={!isStepValid()}
+            >
+              Submit
+            </button>
+          ) : (
+            <button 
+              onClick={handleNext}
+              className="form-button ml-auto"
+              disabled={!isStepValid()}
+            >
+              Next step
+            </button>
+          )}
         </div>
       </div>
     </div>
