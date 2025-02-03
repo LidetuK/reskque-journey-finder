@@ -14,6 +14,7 @@ const TOTAL_STEPS = 7;
 const DiscoveryForm = () => {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     // Step 1
     name: '',
@@ -86,14 +87,45 @@ const DiscoveryForm = () => {
     }
   };
 
-  const handleSubmit = () => {
-    // Handle form submission logic here
-    toast({
-      title: "Thank you for your submission!",
-      description: "Thank you for sharing your thoughts and insights! We truly appreciate your honesty and openness. Based on your responses, we'll prepare personalized recommendations for your upcoming discovery call with Resk'Que. An AI assistant will contact you within the next few minutes to confirm your information and answer any immediate questions you might have. This will also help us prepare for your scheduled discovery call with Resk'Que. We look forward to connecting with you soon!",
-      duration: 10000, // Show for 10 seconds
-      className: "bg-green-50 border-green-200",
-    });
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: 'bcdce293-887c-4f5f-b654-aaf23118eceb',
+          subject: `Discovery Call Request from ${formData.name}`,
+          from_name: formData.name,
+          to_email: 'thee.lifeguide+discoverycall@gmail.com',
+          message: JSON.stringify(formData, null, 2),
+          ...formData
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast({
+          title: "Thank you for your submission!",
+          description: "Thank you for sharing your thoughts and insights! We truly appreciate your honesty and openness. Based on your responses, we'll prepare personalized recommendations for your upcoming discovery call with Resk'Que. An AI assistant will contact you within the next few minutes to confirm your information and answer any immediate questions you might have. This will also help us prepare for your scheduled discovery call with Resk'Que. We look forward to connecting with you soon!",
+          duration: 10000,
+          className: "bg-green-50 border-green-200",
+        });
+      } else {
+        throw new Error('Form submission failed');
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "There was an error submitting your form. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const renderStep = () => {
@@ -504,9 +536,9 @@ const DiscoveryForm = () => {
             <button 
               onClick={handleSubmit}
               className="form-button ml-auto"
-              disabled={!isStepValid()}
+              disabled={!isStepValid() || isSubmitting}
             >
-              Submit
+              {isSubmitting ? 'Submitting...' : 'Submit'}
             </button>
           ) : (
             <button 
