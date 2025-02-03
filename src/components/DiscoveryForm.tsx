@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { Toaster } from "@/components/ui/toaster";
+import { useState } from 'react';
 import ProgressBar from './ProgressBar';
 import StepIndicator from './StepIndicator';
 import { Input } from '@/components/ui/input';
@@ -6,7 +7,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from "@/hooks/use-toast";
 
 const TOTAL_STEPS = 7;
@@ -471,19 +471,21 @@ const DiscoveryForm = () => {
         <StepIndicator currentStep={currentStep} totalSteps={TOTAL_STEPS} />
         <ProgressBar currentStep={currentStep} totalSteps={TOTAL_STEPS} />
         
-        <div className="mb-12">
-          <h1 className="text-2xl font-bold mb-4">
-            DISCOVERY CALL WITH RESK&apos;QUE
-          </h1>
-          <h2 className="text-xl mb-6">
-            WHAT&apos;S YOUR CONCEPT? LET&apos;S TALK!
-          </h2>
-          <p className="text-gray-600">
-            Thank you for taking the first step toward transformation! This short questionnaire 
-            will help us better understand your unique situation so that Resk&apos;Que can 
-            provide tailored guidance during your discovery call.
-          </p>
-        </div>
+        {currentStep === 1 && (
+          <div className="mb-12">
+            <h1 className="text-2xl font-bold mb-4">
+              DISCOVERY CALL WITH RESK&apos;QUE
+            </h1>
+            <h2 className="text-xl mb-6">
+              WHAT&apos;S YOUR CONCEPT? LET&apos;S TALK!
+            </h2>
+            <p className="text-gray-600">
+              Thank you for taking the first step toward transformation! This short questionnaire 
+              will help us better understand your unique situation so that Resk&apos;Que can 
+              provide tailored guidance during your discovery call.
+            </p>
+          </div>
+        )}
 
         <div className="mb-8">
           {renderStep()}
