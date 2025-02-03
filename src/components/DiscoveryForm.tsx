@@ -249,28 +249,76 @@ const DiscoveryForm = () => {
                     ))}
                   </RadioGroup>
                 </div>
+
+                {formData.lifeStatus === 'Feeling stuck or overwhelmed' && (
+                  <>
+                    <div>
+                      <Label htmlFor="challengingAreas">What area(s) of your life feel most challenging at the moment?</Label>
+                      <Textarea
+                        id="challengingAreas"
+                        value={formData.challengingAreas}
+                        onChange={(e) => handleInputChange('challengingAreas', e.target.value)}
+                        className="input-field"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="currentFeeling">What's one word you'd use to describe how you're feeling about your current situation?</Label>
+                      <Input
+                        id="currentFeeling"
+                        value={formData.currentFeeling}
+                        onChange={(e) => handleInputChange('currentFeeling', e.target.value)}
+                        className="input-field"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             ) : (
-              <div>
-                <Label>How would you describe where you are right now in life?</Label>
-                <RadioGroup
-                  value={formData.lifeStatus}
-                  onValueChange={(value) => handleInputChange('lifeStatus', value)}
-                  className="space-y-2 mt-2"
-                >
-                  {[
-                    'Feeling stuck or overwhelmed',
-                    'On the verge of a breakthrough but need clarity',
-                    'Doing well but wanting to level up',
-                    'Rebuilding after a major setback',
-                    'Exploring new possibilities'
-                  ].map((status) => (
-                    <div key={status} className="flex items-center space-x-2">
-                      <RadioGroupItem value={status} id={status} />
-                      <Label htmlFor={status}>{status}</Label>
+              <div className="space-y-6">
+                <div>
+                  <Label>How would you describe where you are right now in life?</Label>
+                  <RadioGroup
+                    value={formData.lifeStatus}
+                    onValueChange={(value) => handleInputChange('lifeStatus', value)}
+                    className="space-y-2 mt-2"
+                  >
+                    {[
+                      'Feeling stuck or overwhelmed',
+                      'On the verge of a breakthrough but need clarity',
+                      'Doing well but wanting to level up',
+                      'Rebuilding after a major setback',
+                      'Exploring new possibilities'
+                    ].map((status) => (
+                      <div key={status} className="flex items-center space-x-2">
+                        <RadioGroupItem value={status} id={status} />
+                        <Label htmlFor={status}>{status}</Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
+
+                {formData.lifeStatus === 'Feeling stuck or overwhelmed' && (
+                  <>
+                    <div>
+                      <Label htmlFor="challengingAreas">What area(s) of your life feel most challenging at the moment?</Label>
+                      <Textarea
+                        id="challengingAreas"
+                        value={formData.challengingAreas}
+                        onChange={(e) => handleInputChange('challengingAreas', e.target.value)}
+                        className="input-field"
+                      />
                     </div>
-                  ))}
-                </RadioGroup>
+                    <div>
+                      <Label htmlFor="currentFeeling">What's one word you'd use to describe how you're feeling about your current situation?</Label>
+                      <Input
+                        id="currentFeeling"
+                        value={formData.currentFeeling}
+                        onChange={(e) => handleInputChange('currentFeeling', e.target.value)}
+                        className="input-field"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </>
