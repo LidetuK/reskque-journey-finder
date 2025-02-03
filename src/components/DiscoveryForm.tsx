@@ -151,6 +151,16 @@ const DiscoveryForm = () => {
               </div>
 
               <div>
+                <Label htmlFor="changeDesire">What's the one thing you'd change about your life or career if you could?</Label>
+                <Textarea
+                  id="changeDesire"
+                  value={formData.changeDesire}
+                  onChange={(e) => handleInputChange('changeDesire', e.target.value)}
+                  className="input-field"
+                />
+              </div>
+
+              <div>
                 <Label>Select your age range</Label>
                 <RadioGroup
                   value={formData.ageRange}
