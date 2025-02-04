@@ -8,13 +8,16 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { useToast } from "@/hooks/use-toast";
+import { CheckCircle } from 'lucide-react';
 
-const TOTAL_STEPS = 7;
+const TOTAL_STEPS = 8; // Increased to include success step
 
 const DiscoveryForm = () => {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  
   const [formData, setFormData] = useState({
     // Step 1
     name: '',
@@ -108,12 +111,8 @@ const DiscoveryForm = () => {
       const data = await response.json();
 
       if (data.success) {
-        toast({
-          title: "Thank you for your submission!",
-          description: "Thank you for sharing your thoughts and insights! We truly appreciate your honesty and openness. Based on your responses, we'll prepare personalized recommendations for your upcoming discovery call with Resk'Que. An AI assistant will contact you within the next few minutes to confirm your information and answer any immediate questions you might have. This will also help us prepare for your scheduled discovery call with Resk'Que. We look forward to connecting with you soon!",
-          duration: 10000,
-          className: "bg-green-50 border-green-200",
-        });
+        setIsSubmitted(true);
+        setCurrentStep(TOTAL_STEPS);
       } else {
         throw new Error('Form submission failed');
       }
@@ -129,6 +128,22 @@ const DiscoveryForm = () => {
   };
 
   const renderStep = () => {
+    if (currentStep === TOTAL_STEPS && isSubmitted) {
+      return (
+        <div className="success-container">
+          <CheckCircle className="success-icon" />
+          <h2 className="success-title">Thank You for Your Submission!</h2>
+          <p className="success-message">
+            Thank you for sharing your thoughts and insights! We truly appreciate your honesty and openness. 
+            Based on your responses, we'll prepare personalized recommendations for your upcoming discovery 
+            call with Resk'Que. An AI assistant will contact you within the next few minutes to confirm your 
+            information and answer any immediate questions you might have. This will also help us prepare for 
+            your scheduled discovery call with Resk'Que. We look forward to connecting with you soon!
+          </p>
+        </div>
+      );
+    }
+
     switch (currentStep) {
       case 1:
         return (
@@ -553,10 +568,10 @@ const DiscoveryForm = () => {
         
         {currentStep === 1 && (
           <div className="mb-12">
-            <h1 className="text-2xl font-bold mb-4">
+            <h1 className="text-2xl font-bold mb-4 text-black">
               DISCOVERY CALL WITH RESK&apos;QUE
             </h1>
-            <h2 className="text-xl mb-6">
+            <h2 className="text-xl mb-6 text-black">
               WHAT&apos;S YOUR CONCEPT? LET&apos;S TALK!
             </h2>
             <p className="text-gray-600">
@@ -572,7 +587,7 @@ const DiscoveryForm = () => {
         </div>
 
         <div className="flex justify-between mt-12">
-          {currentStep > 1 && (
+          {currentStep > 1 && !isSubmitted && (
             <button 
               onClick={handlePrevious}
               className="form-button"
@@ -580,7 +595,7 @@ const DiscoveryForm = () => {
               Previous
             </button>
           )}
-          {currentStep === TOTAL_STEPS ? (
+          {currentStep === 7 ? (
             <button 
               onClick={handleSubmit}
               className="form-button ml-auto"
@@ -588,7 +603,7 @@ const DiscoveryForm = () => {
             >
               {isSubmitting ? 'Submitting...' : 'Submit'}
             </button>
-          ) : (
+          ) : currentStep < TOTAL_STEPS && !isSubmitted ? (
             <button 
               onClick={handleNext}
               className="form-button ml-auto"
@@ -596,7 +611,7 @@ const DiscoveryForm = () => {
             >
               Next step
             </button>
-          )}
+          ) : null}
         </div>
       </div>
     </div>
